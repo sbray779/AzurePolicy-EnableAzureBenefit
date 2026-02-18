@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "policyAssignmentName": {
-      "value": "arc-windows-license-reclaim"
+      "value": "arc-windows-license-sa"
     },
     "policyDefinitionID": {
-      "value": "/subscriptions/{subscription-id}/providers/Microsoft.Authorization/policyDefinitions/arc-windows-server-license-reclaim"
+      "value": "/subscriptions/{subscription-id}/providers/Microsoft.Authorization/policyDefinitions/arc-windows-server-license-sa"
     },
     "assignmentScope": {
       "value": "/subscriptions/{subscription-id}"
@@ -15,7 +15,7 @@
       "value": "DeployIfNotExists"
     },
     "licenseType": {
-      "value": "WindowsServerDatacenter"
+      "value": "Windows Server"
     },
     "location": {
       "value": "eastus"

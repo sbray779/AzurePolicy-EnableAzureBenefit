@@ -113,7 +113,7 @@ The policy supports the following parameters:
 | Parameter | Description | Allowed Values | Default |
 |-----------|-------------|----------------|----------|
 | `effect` | Policy effect | DeployIfNotExists, AuditIfNotExists, Disabled | DeployIfNotExists |
-| `licenseType` | Windows Server license type | Windows Server, WindowsServerDatacenter | WindowsServerDatacenter |
+| `licenseType` | Windows Server license type | Windows Server, WindowsServerDatacenter | Windows Server |
 
 ## Compliance and Monitoring
 
