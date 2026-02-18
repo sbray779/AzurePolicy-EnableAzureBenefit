@@ -1,0 +1,27 @@
+{
+  "effect": {
+    "type": "String",
+    "metadata": {
+      "displayName": "Effect",
+      "description": "Enable or disable the execution of the policy"
+    },
+    "allowedValues": [
+      "DeployIfNotExists",
+      "AuditIfNotExists",
+      "Disabled"
+    ],
+    "defaultValue": "DeployIfNotExists"
+  },
+  "licenseType": {
+    "type": "String",
+    "metadata": {
+      "displayName": "License Type",
+      "description": "Windows Server license type to apply"
+    },
+    "allowedValues": [
+      "Windows Server",
+      "WindowsServerDatacenter"
+    ],
+    "defaultValue": "WindowsServerDatacenter"
+  }
+}

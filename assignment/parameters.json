@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "policyAssignmentName": {
+      "value": "arc-windows-license-reclaim"
+    },
+    "policyDefinitionID": {
+      "value": "/subscriptions/{subscription-id}/providers/Microsoft.Authorization/policyDefinitions/arc-windows-server-license-reclaim"
+    },
+    "assignmentScope": {
+      "value": "/subscriptions/{subscription-id}"
+    },
+    "effect": {
+      "value": "DeployIfNotExists"
+    },
+    "licenseType": {
+      "value": "WindowsServerDatacenter"
+    },
+    "location": {
+      "value": "eastus"
+    }
+  }
+}

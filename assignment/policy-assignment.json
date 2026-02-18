@@ -1,0 +1,121 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "policyAssignmentName": {
+      "type": "string",
+      "defaultValue": "arc-windows-license-reclaim",
+      "metadata": {
+        "description": "Name of the policy assignment"
+      }
+    },
+    "policyDefinitionID": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource ID of the policy definition"
+      }
+    },
+    "assignmentScope": {
+      "type": "string",
+      "defaultValue": "[subscription().id]",
+      "metadata": {
+        "description": "Scope for the policy assignment (subscription or resource group)"
+      }
+    },
+    "effect": {
+      "type": "string",
+      "defaultValue": "DeployIfNotExists",
+      "allowedValues": [
+        "DeployIfNotExists",
+        "AuditIfNotExists",
+        "Disabled"
+      ],
+      "metadata": {
+        "description": "Policy effect"
+      }
+    },
+    "licenseType": {
+      "type": "string",
+      "defaultValue": "WindowsServerDatacenter",
+      "allowedValues": [
+        "Windows Server",
+        "WindowsServerDatacenter"
+      ],
+      "metadata": {
+        "description": "Windows Server license type"
+      }
+    },
+    "enableESU": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable Extended Security Updates"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus",
+      "metadata": {
+        "description": "Location for the managed identity"
+      }
+    }
+  },
+  "variables": {
+    "policyAssignmentDisplayName": "Enable Windows Server License Reclaim for Arc Servers",
+    "policyAssignmentDescription": "Automatically enables Windows Server license reclaim and ESU when servers are Arc-enabled"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Authorization/policyAssignments",
+      "apiVersion": "2023-04-01",
+      "name": "[parameters('policyAssignmentName')]",
+      "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "displayName": "[variables('policyAssignmentDisplayName')]",
+        "description": "[variables('policyAssignmentDescription')]",
+        "policyDefinitionId": "[parameters('policyDefinitionID')]",
+        "scope": "[parameters('assignmentScope')]",
+        "notScopes": [],
+        "parameters": {
+          "effect": {
+            "value": "[parameters('effect')]"
+          },
+          "licenseType": {
+            "value": "[parameters('licenseType')]"
+          },
+          "enableESU": {
+            "value": "[parameters('enableESU')]"
+          }
+        },
+        "enforcementMode": "Default"
+      }
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "name": "[guid(parameters('policyAssignmentName'), 'contributor')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Authorization/policyAssignments', parameters('policyAssignmentName'))]"
+      ],
+      "properties": {
+        "roleDefinitionId": "[concat(subscription().id, '/providers/Microsoft.Authorization/roleDefinitions/cd570a14-e51a-42ad-bac8-bafd67325302')]",
+        "principalId": "[reference(resourceId('Microsoft.Authorization/policyAssignments', parameters('policyAssignmentName')), '2023-04-01', 'Full').identity.principalId]",
+        "principalType": "ServicePrincipal",
+        "scope": "[parameters('assignmentScope')]"
+      }
+    }
+  ],
+  "outputs": {
+    "policyAssignmentId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Authorization/policyAssignments', parameters('policyAssignmentName'))]"
+    },
+    "policyAssignmentPrincipalId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Authorization/policyAssignments', parameters('policyAssignmentName')), '2023-04-01', 'Full').identity.principalId]"
+    }
+  }
+}
